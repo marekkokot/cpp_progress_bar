@@ -91,15 +91,30 @@ int ProgressBar::GetConsoleWidth() const {
     int width = kDefaultConsoleWidth;
 
 #ifdef _WINDOWS
-        CONSOLE_SCREEN_BUFFER_INFO csbi;
-        GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-        width = csbi.srWindow.Right - csbi.srWindow.Left;
+	    bool stdout_was_redirected_to_file = !_isatty(_fileno(stdout));
+	    bool stderr_was_redirected_to_file = !_isatty(_fileno(stderr));
+
+		if (stdout_was_redirected_to_file && stderr_was_redirected_to_file)
+	    {
+	        //pass, keep default
+	    }
+	    else if (stdout_was_redirected_to_file)
+	    {
+	        CONSOLE_SCREEN_BUFFER_INFO csbi;
+	        GetConsoleScreenBufferInfo(GetStdHandle(STD_ERROR_HANDLE), &csbi);
+	        width = csbi.srWindow.Right - csbi.srWindow.Left;
+	    }
+	    else
+	    {
+	        CONSOLE_SCREEN_BUFFER_INFO csbi;
+	        GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+	        width = csbi.srWindow.Right - csbi.srWindow.Left;
+	    }
 #else
         struct winsize win;
         if (ioctl(0, TIOCGWINSZ, &win) != -1)
             width = win.ws_col;
 #endif
-
     return width;
 }
 
