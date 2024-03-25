@@ -25,7 +25,7 @@ const int kMaxBarWidth = 120;
 
 
 bool to_terminal(const std::ostream &os) {
-#if _WINDOWS
+#if _WIN32
     if (os.rdbuf() == std::cout.rdbuf() && !_isatty(_fileno(stdout)))
         return false;
     if (os.rdbuf() == std::cerr.rdbuf() && !_isatty(_fileno(stderr)))
@@ -90,7 +90,7 @@ void ProgressBar::SetStyle(char unit_bar, char unit_space) {
 int ProgressBar::GetConsoleWidth() const {
     int width = kDefaultConsoleWidth;
 
-#ifdef _WINDOWS
+#ifdef _WIN32
 	    bool stdout_was_redirected_to_file = !_isatty(_fileno(stdout));
 	    bool stderr_was_redirected_to_file = !_isatty(_fileno(stderr));
 
