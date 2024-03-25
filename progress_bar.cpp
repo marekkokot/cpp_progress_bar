@@ -48,7 +48,7 @@ ProgressBar::ProgressBar(uint64_t total,
     if (silent_)
         return;
 
-    frequency_update = std::max(static_cast<uint64_t>(1), total_ / 1000);
+    frequency_update = (std::max)(static_cast<uint64_t>(1), total_ / 1000);
     out = &out_;
 
     if ((logging_mode_ = !to_terminal(*out)))
@@ -105,11 +105,11 @@ int ProgressBar::GetConsoleWidth() const {
 
 int ProgressBar::GetBarLength() const {
     // get console width and according adjust the length of the progress bar
-    return std::min(GetConsoleWidth(), kMaxBarWidth)
+    return (std::min)(GetConsoleWidth(), kMaxBarWidth)
                     - 9
                     - description_.size()
                     - kCharacterWidthPercentage
-                    - std::floor(std::log10(std::max((uint64_t)2, total_)) + 1) * 2;
+                    - std::floor(std::log10((std::max)((uint64_t)2, total_)) + 1) * 2;
 }
 
 std::string get_progress_summary(double progress_ratio) {
